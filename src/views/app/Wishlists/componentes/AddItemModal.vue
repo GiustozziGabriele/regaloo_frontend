@@ -6,6 +6,7 @@
     import { getHostname } from '@/lib/utils'
     import BaseModal from '@/components/UI components/BaseModal.vue'
     import ImageInput from '@/components/functional components/imageInput.vue'
+import FormField from '@/components/functional components/formField.vue'
 
     const emit = defineEmits(['save'])
     const modal = useModalStore()
@@ -54,38 +55,16 @@
         @close="reset"
     >
 
-        <div class="mb-3">
-            <label class="form-label small text-muted">Nome articolo</label>
-            <input v-model="title" type="text" class="form-control" placeholder="Es. iPhone 15" />
-        </div>
+        <div class="d-flex flex-row align-items-center gap-3 mb-2">
+            <ImageInput @image-selected="catchImg" variant="cover"/>
 
-        <div class="d-flex gap-3 mb-3">
-            <div class="flex-grow-1">
-                <label class="form-label small text-muted">Link prodotto</label>
-                <input v-model="url" type="text" class="form-control" placeholder="https://amazon.it/..." />
-            </div>
-            <div>
-                <label class="form-label small text-muted">Prezzo <span class="text-muted">(opzionale)</span></label>
-                <div class="input-group">
-                    <input v-model="price" type="text" class="form-control" placeholder="0.00" />
-                    <span class="input-group-text">€</span>
-                </div>
-            </div>
+            <div class="d-flex flex-column flex-grow-1">
+                <FormField v-model="title" label="Nome articolo" placeholder="Es. iPhone 15" class="flex-grow-1" />
+                <FormField v-model="price" label="Prezzo" placeholder="0.00" class="flex-grow-1" />
+            </div>  
         </div>
-
-        <div v-if="title" class="preview-box p-2 rounded mb-1">
-            <small class="text-muted">Anteprima</small>
-            <div class="d-flex align-items-center gap-2 mt-1">
-                <ImageInput @image-selected="catchImg" />
-                <div class="d-flex justify-content-between align-items-start w-100">
-                    <div>
-                        <p class="fw-semibold small mb-0 text-truncate">{{ title }}</p>
-                        <small class="text-muted">{{ getHostname(url) ?? '—' }}</small>
-                    </div>
-                    <small class="fw-semibold text-nowrap">{{ price }} €</small>
-                </div>
-            </div>
-        </div>
+        
+        <FormField v-model="url" label="Link prodotto" placeholder="https://amazon.it/..." />
 
         <template #footer>
             <button class="btn-action" style="background:#1a1a1a; color:#fff;" :disabled="!title" @click="submit">
