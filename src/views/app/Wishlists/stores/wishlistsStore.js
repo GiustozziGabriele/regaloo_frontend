@@ -5,7 +5,8 @@ import { supabase } from '@/lib/supabase'
 
 export const useWishlistsStore = defineStore('wishlists', {
   state: () => ({
-    wishlists: []
+    wishlists: [],
+    needRefresh: false
   }),
 
   getters: {
@@ -14,17 +15,18 @@ export const useWishlistsStore = defineStore('wishlists', {
 
   actions: {
     async fetchWishlists() {
-      if(this.wishlists) return this.wishlists
+        const auth = useAuthStore()
+        if (!auth.userId) return
+        if (!this.needsRefresh) return this.wishlists
 
-      const auth = useAuthStore()
+        const { data } = await supabase
+            .from('wishlists') 
+            .select('*')
+            .eq('user_id', auth.userId)
 
-      const { data } = await supabase
-        .from('wishlists') 
-        .select('*')
-        .eq('user_id', auth.userId)
-
-      
-      this.wishlists = data
+        
+        this.wishlists = data
+        this.needsRefresh = false
     }
   },
 

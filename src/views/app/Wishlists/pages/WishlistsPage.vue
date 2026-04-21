@@ -8,7 +8,6 @@
     const auth = useAuthStore()
 
     onMounted(async() => {
-        console.log(auth.user)
         await wishlists.fetchWishlists()
     })
 </script>
