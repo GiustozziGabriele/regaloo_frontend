@@ -1,0 +1,143 @@
+/* Wrapper principale */
+#app {
+  min-height: 100vh;
+  background-color: #eef1f5;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+a {
+  color: inherit !important;
+  text-decoration: inherit !important;
+}
+
+.container-custom {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.05), 
+      0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.global-loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+
+
+
+
+
+/* BOOTSTRAP BUTTON COLORS */
+.btn-success {
+  background-color: #66846c;
+  border-color: #66846c;
+}
+.btn-success:hover {
+  background-color: #4b604f;
+  border-color: #4b604f;
+}
+.text-success {
+  color: #66846c !important;
+}
+
+.btn-primary {
+  background-color: #016299;
+  border-color: #016299;
+}
+.btn-primary:hover {
+  background-color: #004c75;
+  border-color: #004c75;
+}
+.text-primary {
+  color: #016299 !important;
+}
+
+
+
+.btn-outline-success {
+  color: #66846c;
+  border-color: #66846c;
+}
+.btn-outline-success:hover {
+  background-color: #66846c;
+  border-color: #66846c;
+}
+
+.btn-outline-primary {
+  color: #016299;
+  border-color: #016299;
+}
+.btn-outline-primary:hover {
+  background-color: #016299;
+  border-color: #016299;
+}
+
+
+.btn-danger {
+  background-color: #B2554D !important;
+  border-color: #B2554D !important;
+
+}
+.btn-danger:hover {
+  background-color: #a12e23 !important;
+  border-color: #a12e23 !important;
+
+}
+
+
+
+
+.bg-success {
+  background-color: #66846c !important;
+}
+
+.bg-primary {
+  background-color: #016299 !important;
+}
+
+.bg-danger {
+  background-color: #B2554D !important;
+}
+
+
+
+
+.text-bg-success {
+  background-color: #66846c !important;
+}
+
+.text-bg-danger {
+  background-color: #B2554D !important;
+}
+
+.text-bg-warning {
+  background-color: #C4A15A !important;
+}
+
+
+.secondary-info {
+  color: #c4c4c4;
+}
+
+.primary-info {
+  color: #016299;
+  font-weight: 500;
+}

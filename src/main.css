@@ -1,0 +1,89 @@
+/* assets/main.css */
+
+/* ── BOTTONI ── */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0,0,0,0.18);
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5f5e5a;
+  transition: background 0.12s, color 0.12s;
+}
+.icon-btn:hover              { background: #f5f4f0; color: #1a1a1a; }
+.icon-btn--danger:hover      { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+.icon-btn--lg                { width: 40px; height: 40px; }
+
+.btn-action {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0,0,0,0.18);
+  background: transparent;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: background 0.12s;
+}
+.btn-action:hover { background: #f5f4f0; }
+
+/* ── INPUT ── */
+.search-input {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0,0,0,0.18);
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.12s;
+}
+.search-input:focus { border-color: rgba(0,0,0,0.35); }
+
+/* ── CARD BASE ── */
+.base-card {
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s;
+}
+.base-card:hover { border-color: rgba(0,0,0,0.25); }
+
+/* ── GRIGLIA ── */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 0;
+  color: #888780;
+  font-size: 13px;
+}
+
+/* ── BADGE STATI ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.badge--hidden    { background: #F1EFE8; color: #444441; }
+.badge--available { background: #EAF3DE; color: #27500A; }
+.badge--reserved  { background: #FAEEDA; color: #633806; }
+.badge--purchased { background: #E6F1FB; color: #0C447C; }
+.badge--delivered { background: #E1F5EE; color: #085041; }
+.badge--archived  { background: #F1EFE8; color: #5F5E5A; border: 0.5px solid #D3D1C7; }
