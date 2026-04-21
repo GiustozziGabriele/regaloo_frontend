@@ -83,7 +83,5 @@ export const useWishlistItemsStore = defineStore('items', {
         this.needRefresh = true
         return true
     }
-  },
-
-  persist: {}
+  }
 })

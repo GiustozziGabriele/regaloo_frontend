@@ -23,10 +23,6 @@ export const useWishlistsStore = defineStore('wishlists', {
             .from('wishlists') 
             .select('*')
             .eq('user_id', auth.userId)
-
-        console.log('USER ID:', auth.userId)
-        console.log('DATA:', data)
-
         
         this.wishlists = data
         this.needRefresh = false

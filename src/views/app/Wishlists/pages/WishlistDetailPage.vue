@@ -63,6 +63,8 @@
                 + Aggiungi articolo
             </button>
 
+            {{ id }}
+
             <input
                 v-model="search"
                 type="search"

@@ -16,7 +16,7 @@
 </script>
 
 <template>
-  <div class="base-card">
+  <div class="base-card" v-if="item">
     <div class="card__img">
         <Image :src="item.item_id?.image_url" :size="'full'"/>
 
