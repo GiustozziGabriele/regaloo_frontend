@@ -17,7 +17,7 @@ export const useWishlistsStore = defineStore('wishlists', {
     async fetchWishlists() {
         const auth = useAuthStore()
         if (!auth.userId) return
-        if (!this.needRefresh) return this.wishlists
+        if (!this.needRefresh) return 
 
         const { data } = await supabase
             .from('wishlists') 
@@ -29,5 +29,5 @@ export const useWishlistsStore = defineStore('wishlists', {
     }
   },
 
-  persist: {}
+  persist: true
 })

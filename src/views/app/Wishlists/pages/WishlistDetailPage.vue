@@ -1,6 +1,6 @@
 <script setup>
     import { useRoute } from 'vue-router'
-    import { onMounted, computed, ref } from 'vue';
+    import { watch, computed, ref } from 'vue';
     import { useWishlistsStore } from '../stores/wishlistsStore';
     import { useWishlistItemsStore } from '../stores/wishlistItemsStore';
     import { useModalStore } from '@/stores/modalStore';
@@ -14,41 +14,42 @@
     const modal = useModalStore()
     const search = ref('')
 
-    const id = route.params.id
+    const id = computed(() => route.params.id)
+    const wishlist = computed(() => wishlists.getById(id.value))
 
-    const wishlist = computed(() => wishlists.getById(id))
-
-    onMounted(async() => {
-        await items.fetchWishlistItems(id)
-    })
+    watch(wishlist, async (val) => {
+        if (val && !items.itemsByWishlist[id.value]) {
+            await items.fetchWishlistItems(id.value)
+        }
+    }, { immediate: true })
 
     const filteredItems = computed(() =>
-        items.wishlistItems.filter(item =>
+        items.getItems(id.value).filter(item =>
             item.item_id?.title?.toLowerCase().includes(search.value.toLowerCase())
         )
     )
 
     const addItem = async(value) => {
-        await items.addItem(value, id)
+        await items.addItem(value, id.value)
     }
 
     const updateItem = async(value) => {
-        await items.updateItem(value.data, value.id)
+        await items.updateItem(value.data, value.id, id.value)
     }
 
     const deleteItem = async(value) => {
-        await items.removeItemFromWishlist(value?.item_id.id)
+        await items.removeItem(value?.item_id.id, id.value)
     }
 </script>
 
 <template>
-    <div>
+    <div v-if="wishlist">
         <!-- header -->
         <div class="d-flex align-items-center justify-content-between mb-3">
             <h4 style="font-size: 16px; font-weight: 500; margin: 0;">{{ wishlist.title }}</h4>
 
             <div class="d-flex gap-2">
-                <button class="icon-btn" title="Condividi"">
+                <button class="icon-btn" title="Condividi">
                     <i class="fi fi-br-share-square"></i>
                 </button>
                 <button class="icon-btn" title="Impostazioni">
@@ -59,11 +60,9 @@
 
         <!-- toolbar -->
         <div class="d-flex align-items-center justify-content-between mb-3">
-            <button class="btn-action" @click="modal.open('addItem', { wishlist })">
+            <button class="btn-action" @click="modal.open('addItem')">
                 + Aggiungi articolo
             </button>
-
-            {{ id }}
 
             <input
                 v-model="search"

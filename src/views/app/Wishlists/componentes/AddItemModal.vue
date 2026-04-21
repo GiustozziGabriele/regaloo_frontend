@@ -47,53 +47,53 @@
 </script>
 
 <template>
-  <BaseModal
-    name="addItem"
-    title="Aggiungi articolo"
-    subtitle="Incolla un link oppure inserisci manualmente"
-    @close="reset"
-  >
+    <BaseModal
+        name="addItem"
+        title="Aggiungi articolo"
+        subtitle="Incolla un link oppure inserisci manualmente"
+        @close="reset"
+    >
 
-    <div class="mb-3">
-        <label class="form-label small text-muted">Nome articolo</label>
-        <input v-model="title" type="text" class="form-control" placeholder="Es. iPhone 15" />
-    </div>
-
-    <div class="d-flex gap-3 mb-3">
-        <div class="flex-grow-1">
-            <label class="form-label small text-muted">Link prodotto</label>
-            <input v-model="url" type="text" class="form-control" placeholder="https://amazon.it/..." />
+        <div class="mb-3">
+            <label class="form-label small text-muted">Nome articolo</label>
+            <input v-model="title" type="text" class="form-control" placeholder="Es. iPhone 15" />
         </div>
-        <div>
-            <label class="form-label small text-muted">Prezzo <span class="text-muted">(opzionale)</span></label>
-            <div class="input-group">
-                <input v-model="price" type="text" class="form-control" placeholder="0.00" />
-                <span class="input-group-text">€</span>
+
+        <div class="d-flex gap-3 mb-3">
+            <div class="flex-grow-1">
+                <label class="form-label small text-muted">Link prodotto</label>
+                <input v-model="url" type="text" class="form-control" placeholder="https://amazon.it/..." />
             </div>
-        </div>
-    </div>
-
-    <div v-if="title" class="preview-box p-2 rounded mb-1">
-        <small class="text-muted">Anteprima</small>
-        <div class="d-flex align-items-center gap-2 mt-1">
-            <ImageInput @image-selected="catchImg" />
-            <div class="d-flex justify-content-between align-items-start w-100">
-                <div>
-                    <p class="fw-semibold small mb-0 text-truncate">{{ title }}</p>
-                    <small class="text-muted">{{ getHostname(url) ?? '—' }}</small>
+            <div>
+                <label class="form-label small text-muted">Prezzo <span class="text-muted">(opzionale)</span></label>
+                <div class="input-group">
+                    <input v-model="price" type="text" class="form-control" placeholder="0.00" />
+                    <span class="input-group-text">€</span>
                 </div>
-                <small class="fw-semibold text-nowrap">{{ price }} €</small>
             </div>
         </div>
-    </div>
 
-    <template #footer>
-        <button class="btn-action" style="background:#1a1a1a; color:#fff;" :disabled="!title" @click="submit">
-            Aggiungi
-        </button>
-    </template>
+        <div v-if="title" class="preview-box p-2 rounded mb-1">
+            <small class="text-muted">Anteprima</small>
+            <div class="d-flex align-items-center gap-2 mt-1">
+                <ImageInput @image-selected="catchImg" />
+                <div class="d-flex justify-content-between align-items-start w-100">
+                    <div>
+                        <p class="fw-semibold small mb-0 text-truncate">{{ title }}</p>
+                        <small class="text-muted">{{ getHostname(url) ?? '—' }}</small>
+                    </div>
+                    <small class="fw-semibold text-nowrap">{{ price }} €</small>
+                </div>
+            </div>
+        </div>
 
-  </BaseModal>
+        <template #footer>
+            <button class="btn-action" style="background:#1a1a1a; color:#fff;" :disabled="!title" @click="submit">
+                Aggiungi
+            </button>
+        </template>
+
+    </BaseModal>
 </template>
 
 <style scoped>

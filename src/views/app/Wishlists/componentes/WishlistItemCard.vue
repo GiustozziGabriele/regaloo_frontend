@@ -1,4 +1,5 @@
 <script setup>
+    import { computed } from 'vue';
     import { getHostname } from '@/lib/utils';
     import { useModalStore } from '@/stores/modalStore';
     import Image from '@/components/UI components/Image.vue';
@@ -13,14 +14,16 @@
             required: true
         }
     })
+
+    const tag = computed(() => props.item.item_id?.url ? 'a' : 'span')
 </script>
 
 <template>
-  <div class="base-card" v-if="item">
+  <div class="base-card">
     <div class="card__img">
         <Image :src="item.item_id?.image_url" :size="'full'"/>
 
-        <statusBadge :status="props.item?.status" class="card__badge" />
+        <statusBadge :status="item?.status" class="card__badge"/>
 
         <div class="card__actions">
             <button class="icon-btn" title="Modifica" @click="modal.open('editItem', item)">
@@ -34,7 +37,7 @@
 
     <div class="card__body">
       <component
-        :is="item.item_id?.url ? 'a' : 'span'"
+        :is="tag"
         :href="item.item_id?.url || undefined"
         target="_blank"
         class="card__title"
@@ -70,7 +73,7 @@
     .card__badge { position: absolute; top: 8px; left: 8px; }
     .card__actions { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; }
 
-    .card__body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .card__body { padding: 12px; display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
 
     .card__title {
         font-size: 13px;
