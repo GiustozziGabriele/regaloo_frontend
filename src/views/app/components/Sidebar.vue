@@ -1,63 +1,68 @@
 <!-- AppSidebar.vue -->
 <script setup>
-import { RouterLink, useRoute } from 'vue-router'
+    import { RouterLink, useRoute } from 'vue-router'
+    import { useAuthStore } from '@/stores/auth'
 
-const route = useRoute()
+    const route = useRoute()
+    const auth = useAuthStore()
 
-const links = [
-  { to: '/app/dashboard', label: 'Dashboard' },
-  { to: '/app/wishlists', label: 'Wishlists' },
-  { to: '/app/events',    label: 'Events' },
-  { to: '/app/people',    label: 'People' },
-]
+    const links = [
+        { to: '/app/dashboard', label: 'Dashboard' },
+        { to: '/app/wishlists', label: 'Wishlists' },
+        { to: '/app/events',    label: 'Events' },
+        { to: '/app/people',    label: 'People' },
+    ]
 
-const isActive = (item) => route.path.startsWith(item.to)
+    const isActive = (item) => route.path.startsWith(item.to)
 </script>
 
 <template>
-  <aside class="sidebar">
-    <div class="sidebar__brand">Regaloo</div>
+    <aside class="sidebar">
+        <div class="sidebar__brand">Regaloo</div>
 
-    <nav class="sidebar__nav">
-      <RouterLink
-        v-for="item in links"
-        :key="item.to"
-        :to="item.to"
-        class="sidebar__link"
-        :class="{ 'sidebar__link--active': isActive(item) }"
-      >
-        {{ item.label }}
-      </RouterLink>
+        <nav class="sidebar__nav">
+            <RouterLink
+                v-for="item in links"
+                :key="item.to"
+                :to="item.to"
+                class="sidebar__link"
+                :class="{ 'sidebar__link--active': isActive(item) }"
+            >
+                {{ item.label }}
+            </RouterLink>
+        </nav>
+
+        <RouterLink
+            to="/app/profile"
+            class="sidebar__link sidebar__profile"
+            :class="{ 'sidebar__link--active': route.path.startsWith('/app/profile') }"
+        >
+            Profilo
+        </RouterLink>
+        <button class="btn-action" @click="auth.logout">
+            Logout
+        </button>
+    </aside>
+
+    <!-- BOTTOM BAR mobile -->
+    <nav class="bottom-bar">
+        <RouterLink
+            v-for="item in links"
+            :key="item.to"
+            :to="item.to"
+            class="bottom-bar__link"
+            :class="{ 'bottom-bar__link--active': isActive(item) }"
+        >
+            {{ item.label }}
+        </RouterLink>
+        <RouterLink
+            to="/app/profile"
+            class="bottom-bar__link"
+            :class="{ 'bottom-bar__link--active': route.path.startsWith('/app/profile') }"
+        >
+            Profilo
+        </RouterLink>
     </nav>
-
-    <RouterLink
-      to="/app/profile"
-      class="sidebar__link sidebar__profile"
-      :class="{ 'sidebar__link--active': route.path.startsWith('/app/profile') }"
-    >
-      Profilo
-    </RouterLink>
-  </aside>
-
-  <!-- BOTTOM BAR mobile -->
-  <nav class="bottom-bar">
-    <RouterLink
-      v-for="item in links"
-      :key="item.to"
-      :to="item.to"
-      class="bottom-bar__link"
-      :class="{ 'bottom-bar__link--active': isActive(item) }"
-    >
-      {{ item.label }}
-    </RouterLink>
-    <RouterLink
-      to="/app/profile"
-      class="bottom-bar__link"
-      :class="{ 'bottom-bar__link--active': route.path.startsWith('/app/profile') }"
-    >
-      Profilo
-    </RouterLink>
-  </nav>
 </template>
 
 <style scoped>

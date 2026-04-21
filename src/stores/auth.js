@@ -5,7 +5,8 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     session: null,
-    loading: true
+    loading: true,
+    initialized : false
   }),
 
   getters: {
@@ -16,6 +17,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     // 🚀 inizializza sessione (OBBLIGATORIO all'avvio app)
     async init() {
+      if (this.initialized) return
       this.loading = true
 
       const { data } = await supabase.auth.getSession()
@@ -23,12 +25,7 @@ export const useAuthStore = defineStore('auth', {
       this.session = data.session
       this.user = data.session?.user ?? null
 
-      // ascolta cambi auth (login/logout/refresh token)
-      supabase.auth.onAuthStateChange((event, session) => {
-        this.session = session
-        this.user = session?.user ?? null
-      })
-
+      this.initialized = true
       this.loading = false
     },
 
@@ -108,6 +105,11 @@ export const useAuthStore = defineStore('auth', {
       if (error) throw error
 
       return data
+    },
+
+    setSession(session) {
+      this.session = session
+      this.user = session?.user ?? null
     }
   },
 

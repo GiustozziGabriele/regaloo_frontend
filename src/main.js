@@ -10,6 +10,7 @@ import './main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { useAuthStore } from './stores/auth'
+import { supabase } from './lib/supabase'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import { createNotivue } from 'notivue'
@@ -42,6 +43,13 @@ app.use(router)
 
 // 🚀 Mount finale
 const auth = useAuthStore()
-auth.init().then(() => {
-  app.mount('#app')
+const { data } = await supabase.auth.getSession()
+
+auth.setSession(data.session)
+supabase.auth.onAuthStateChange((event, session) => {
+  auth.setSession(session)
+  if(!session) router.push('/login')
 })
+
+app.mount('#app')
+
