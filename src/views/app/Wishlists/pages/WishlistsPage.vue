@@ -5,7 +5,6 @@
     import WishlistCard from '../componentes/WishlistCard.vue';
 
     const wishlists = useWishlistsStore()
-    const auth = useAuthStore()
 
     onMounted(async() => {
         await wishlists.fetchWishlists()

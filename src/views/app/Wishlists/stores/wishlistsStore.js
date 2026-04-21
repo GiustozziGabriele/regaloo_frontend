@@ -17,16 +17,19 @@ export const useWishlistsStore = defineStore('wishlists', {
     async fetchWishlists() {
         const auth = useAuthStore()
         if (!auth.userId) return
-        if (!this.needsRefresh) return this.wishlists
+        if (!this.needRefresh) return this.wishlists
 
         const { data } = await supabase
             .from('wishlists') 
             .select('*')
             .eq('user_id', auth.userId)
 
+        console.log('USER ID:', auth.userId)
+        console.log('DATA:', data)
+
         
         this.wishlists = data
-        this.needsRefresh = false
+        this.needRefresh = false
     }
   },
 
