@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 export const useWishlistItemsStore = defineStore('items', {
   state: () => ({
     wishlistItems: [],
-    needRefresh: false
+    needRefresh: true
   }),
 
   actions: {
@@ -25,7 +25,7 @@ export const useWishlistItemsStore = defineStore('items', {
 
     async fetchWishlistItems(wishlist_id) {
         if(!this.needRefresh) return this.wishlistItems
-        
+
         const { data } = await supabase
             .from('item_context') 
             .select('*, item_id(*)')

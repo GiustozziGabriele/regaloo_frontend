@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 export const useWishlistsStore = defineStore('wishlists', {
   state: () => ({
     wishlists: [],
-    needRefresh: false
+    needRefresh: true
   }),
 
   getters: {
