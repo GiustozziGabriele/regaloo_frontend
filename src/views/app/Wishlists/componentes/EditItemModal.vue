@@ -55,7 +55,7 @@
 <template>
     <BaseModal name="editItem" title="Modifica articolo" @close="reset">
         <div class="d-flex flex-row align-items-center gap-3 mb-2">
-            <ImageInput variant="cover" :initial-url="image_url" @image-selected="catchImg" />
+            <ImageInput size="xl" :initial-url="image_url" @image-selected="catchImg" />
 
             <div class="d-flex flex-column flex-grow-1">
                 <FormField v-model="title" label="Nome articolo" placeholder="Es. iPhone 15" class="flex-grow-1" />
@@ -66,7 +66,7 @@
         <FormField v-model="url" label="Link prodotto" placeholder="https://amazon.it/..." />
 
         <template #footer>
-            <button class="btn-action" style="background:#1a1a1a; color:#fff;" :disabled="!title" @click="submit">
+            <button class="btn-confirm" style="background:#1a1a1a; color:#fff;" :disabled="!title" @click="submit">
                 Salva
             </button>
         </template>

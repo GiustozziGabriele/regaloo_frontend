@@ -7,7 +7,9 @@ import { supabase } from '@/lib/supabase'
 export const useWishlistItemsStore = defineStore('items', {
   state: () => ({
     itemsByWishlist: {},
-    needRefresh: {}
+    needRefresh: {},
+    availableItems: [],
+    availableItemsNeedRefresh: true
   }),
 
   actions: {
@@ -45,6 +47,7 @@ export const useWishlistItemsStore = defineStore('items', {
         }
         
         this.itemsByWishlist[wishlist_id].push(res.data.data)
+        this.availableItemsNeedRefresh = true
         push.success({title: "Articolo aggiunto alla wishlist"})
     },
 
@@ -71,7 +74,7 @@ export const useWishlistItemsStore = defineStore('items', {
     },
 
     async removeItem(item_id, wishlist_id) {
-        const { data, error } = await supabase.from('item_context').delete().eq('item_id', item_id)
+        const { error } = await supabase.from('item_context').delete().eq('item_id', item_id)
 
         if(error) {
             push.error({
@@ -84,7 +87,38 @@ export const useWishlistItemsStore = defineStore('items', {
         const index = this.itemsByWishlist[wishlist_id].findIndex(i => i.item_id.id === item_id)
         if (index !== -1) this.itemsByWishlist[wishlist_id].splice(index, 1)
         this.needRefresh[wishlist_id] = true
+        this.availableItemsNeedRefresh = true
         push.success({title: "Articolo rimosso dalla wishlist"})
+    },
+    
+    async fetchAvailableItems(wishlist_id) {
+        if(!this.availableItemsNeedRefresh) return
+
+        const res = await api.get(`/items/${wishlist_id}/available`)
+
+        if (!res.data.success) {
+            push.error({ title: res.data.error.message })
+            return
+        }
+
+        this.availableItems = res.data.data
+        this.availableItemsNeedRefresh = false
+    },
+
+    async addAvailableItems(item_ids, wishlist_id) {
+        const res = await api.post(`/items/${wishlist_id}/add-existing`, { item_ids: item_ids })
+
+        if (!res.data.success) {
+            push.error({ title: res.data.error.message })
+            return
+        }
+
+        res.data.data.forEach(item => {
+            this.itemsByWishlist[wishlist_id].push(item)
+        })
+
+        this.availableItemsNeedRefresh = true
+        push.success({ title: 'Articoli aggiunti' })
     }
   }
 })

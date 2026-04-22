@@ -39,7 +39,7 @@
         >
             Profilo
         </RouterLink>
-        <button class="btn-action" @click="auth.logout">
+        <button class="btn-action text-danger" @click="auth.logout">
             Logout
         </button>
     </aside>
@@ -62,6 +62,9 @@
         >
             Profilo
         </RouterLink>
+        <button class="btn-action text-danger" @click="auth.logout">
+            Logout
+        </button>
     </nav>
 </template>
 
@@ -128,6 +131,7 @@
     right: 0;
     background: #fff;
     border-top: 0.5px solid rgba(0,0,0,0.1);
+    border-radius: 8px 8px 0 0;  
     padding: 8px 0;
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
     z-index: 100;

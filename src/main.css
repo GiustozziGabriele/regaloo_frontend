@@ -30,6 +30,21 @@
   transition: background 0.12s;
 }
 .btn-action:hover { background: #f5f4f0; }
+.btn-action.active { background: #f5f4f0; }
+
+
+.btn-confirm {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #1a1a1a;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+.btn-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── INPUT ── */
 .search-input {

@@ -1,15 +1,13 @@
 <script setup>
     import { onMounted, ref, computed } from 'vue';
     import { useWishlistsStore } from '../stores/wishlistsStore';
-    import { useAuthStore } from '@/stores/auth';
     import { useModalStore } from '@/stores/modalStore';
     import WishlistCard from '../componentes/WishlistCard.vue';
-import CreateWishlistModal from '../componentes/CreateWishlistModal.vue';
+    import CreateWishlistModal from '../componentes/CreateWishlistModal.vue';
 
     const wishlists = useWishlistsStore()
     const modal = useModalStore()
 
-    
     const search = ref('')
 
     onMounted(async() => {
@@ -19,6 +17,10 @@ import CreateWishlistModal from '../componentes/CreateWishlistModal.vue';
     const filteredWishlists = computed(() =>
         wishlists.wishlists.filter(wishlist => wishlist?.title.toLowerCase().includes(search.value.toLowerCase()))
     )
+
+    const createWishlist = async(value) => {
+        await wishlists.createWishlist(value)
+    }
 </script>
 
 <template>
@@ -42,6 +44,6 @@ import CreateWishlistModal from '../componentes/CreateWishlistModal.vue';
             <WishlistCard v-for="w in filteredWishlists" :wishlist="w" :key="w.id"/>
         </div>
 
-        <CreateWishlistModal />
+        <CreateWishlistModal @save="createWishlist"/>
     </div>
 </template>
