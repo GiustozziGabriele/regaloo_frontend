@@ -43,12 +43,12 @@ app.use(router)
 
 // 🚀 Mount finale
 const auth = useAuthStore()
-const { data } = await supabase.auth.getSession()
 
+const { data } = await supabase.auth.getSession()
 auth.setSession(data.session)
+
 supabase.auth.onAuthStateChange((event, session) => {
   auth.setSession(session)
-  if(!session) router.push('/login')
 })
 
 app.mount('#app')

@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import { useWishlistsStore } from '@/views/app/Wishlists/stores/wishlistsStore'
+import { useWishlistItemsStore } from '@/views/app/Wishlists/stores/wishlistItemsStore'
 import { supabase } from '@/lib/supabase'
 
 export const useAuthStore = defineStore('auth', {
@@ -81,8 +83,9 @@ export const useAuthStore = defineStore('auth', {
 
       if (error) throw error
 
-      this.user = null
-      this.session = null
+      useWishlistsStore().$reset()
+      useWishlistItemsStore().$reset()
+      this.$reset()
     },
 
     // 🔁 RESET PASSWORD (email link)
