@@ -2,12 +2,14 @@
     import { reactive } from 'vue';
     import { useLoadingStore } from '@/stores/loadingStore';
     import { useRouter } from 'vue-router';
+    import { useAuthStore } from '@/stores/auth';
     import { push } from 'notivue';
     import PasswordInput from './components/passwordInput.vue';
     import GenericInput from './components/genericInput.vue';
 
     const loading = useLoadingStore()
     const router = useRouter()
+    const auth = useAuthStore()
 
     const form = reactive({
         email: '',
@@ -50,9 +52,10 @@
             })
 
         } catch (err) {
+            console.error(err)
             push.error({
                 title: 'Registrazione fallita',
-                message: err || 'Qualcosa è andato storto'
+                message:'Qualcosa è andato storto'
             })
         }
     }

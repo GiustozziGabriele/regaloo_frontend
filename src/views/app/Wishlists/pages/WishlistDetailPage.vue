@@ -5,10 +5,11 @@
     import { useWishlistItemsStore } from '../stores/wishlistItemsStore';
     import { useModalStore } from '@/stores/modalStore';
     import { shareWishlist } from '@/lib/utils';
-    import ItemCardPrivate from '@/components/UI components/ItemCardPrivate.vue';
+    import ItemCard from '../componentes/ItemCard.vue';
     import AddItemModal from '../componentes/AddItemModal.vue';
     import EditItemModal from '../componentes/EditItemModal.vue';
     import Dropdown from '@/components/UI components/Dropdown.vue';
+
 
 
 
@@ -23,6 +24,10 @@
     const wishlist = computed(() => wishlists.getById(id.value))
 
     watch(wishlist, async(val) => {
+        if (val === undefined) {
+            router.replace('/error/404')
+        }
+
         if (val && !items.itemsByWishlist[id.value]) {
             await items.fetchWishlistItems(id.value)
         }
@@ -93,7 +98,7 @@
 
         <!-- griglia -->
         <div v-if="filteredItems.length" class="app-grid">
-            <ItemCardPrivate 
+            <ItemCard 
                 v-for="item in filteredItems"
                 :key="item.id"
                 :item="item"
@@ -109,12 +114,3 @@
         <EditItemModal @save="updateItem" />
     </div>
 </template>
-
-<style scoped>
-    .empty-state {
-        text-align: center;
-        padding: 3rem 0;
-        color: #888780;
-        font-size: 13px;
-    }
-</style>

@@ -6,9 +6,8 @@ import { push } from 'notivue'
 
 export const usePublicWishlistStore = defineStore('publicWishlist', {
   state: () => ({
-    wishilistItems: [],
-    isOwner: false,
-    needRefresh: true
+    wishilistItems: {},
+    showDetails: false
   }),
 
   actions: {
@@ -19,11 +18,18 @@ export const usePublicWishlistStore = defineStore('publicWishlist', {
             push.error({ title: res.data.error.message })
             return
         }
+        const is_owner = res.data.meta.is_owner
+        const is_logged = res.data.meta.is_logged
 
-        this.wishilistItems = res.data.data
-        this.isOwner = res.data.meta.is_owner
-        this.needRefresh = false
-    }
+        if(is_owner) this.showDetails = false
+        if(!is_owner && is_logged) this.showDetails = true
+
+        this.wishilistItems[wishlist_id] = res.data.data
+    },
+
+    getItems(wishlist_id) {
+        return this.wishilistItems[wishlist_id] ?? []
+    },
   },
 
   persist: true

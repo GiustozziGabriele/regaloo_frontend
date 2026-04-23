@@ -2,8 +2,10 @@
     import { onMounted, ref, computed } from 'vue';
     import { useWishlistsStore } from '../stores/wishlistsStore';
     import { useModalStore } from '@/stores/modalStore';
-    import WishlistCard from '../componentes/WishlistCard.vue';
     import CreateWishlistModal from '../componentes/CreateWishlistModal.vue';
+    import WishlistCard from '../componentes/WishlistCard.vue';
+
+
 
     const wishlists = useWishlistsStore()
     const modal = useModalStore()
@@ -42,6 +44,10 @@
         <!-- griglia -->
         <div v-if="filteredWishlists.length" class="app-grid">
             <WishlistCard v-for="w in filteredWishlists" :wishlist="w" :key="w.id"/>
+        </div>
+
+        <div v-else class="empty-state">
+            <p>{{ search ? 'Nessun wishlist trovata.' : 'Nessun wishlist nella lista. Aggiungine una!' }}</p>
         </div>
 
         <CreateWishlistModal @save="createWishlist"/>

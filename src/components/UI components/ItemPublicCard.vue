@@ -10,9 +10,9 @@
             type: Object,
             required: true
         },
-        isOwner: {
-            type: Boolean,
-            default: true
+        showDetails: {
+            type: Boolean, 
+            required: true
         }
     })
 
@@ -25,7 +25,7 @@
     <div class="card__img">
         <Image :src="item.item_id?.image_url" :size="'full'"/>
 
-        <statusBadge :status="item?.status" class="card__badge" v-if="!isOwner"/>
+        <statusBadge :status="item?.status" class="card__badge" v-if="showDetails"/>
     </div>
 
     <div class="card__body">
@@ -43,7 +43,7 @@
       <div class="card__footer">
         <span class="card__price">{{ item.item_id?.price }} €</span>
 
-        <div v-if="!isOwner">
+        <div v-if="showDetails">
             <template v-if="isReserved">
                 <span class="card__reserved-by">
                     {{ isOwner ? `da ${item.reserved_by_user_id}` : 'Già prenotato' }}

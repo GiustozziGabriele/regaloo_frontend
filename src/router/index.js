@@ -14,12 +14,17 @@ import CheckEmail from '@/views/auth/CheckEmail.vue'
 import Callback from '@/views/auth/Callback.vue'
 
 import Dashboard from '@/views/app/Dashboard/Dashboard.vue'
-import Profile from '@/views/app/Profile/Profile.vue'
+import ProfilePage from '@/views/app/Profile/ProfilePage.vue'
 import WishlistsPage from '@/views/app/Wishlists/pages/WishlistsPage.vue'
-import WishlistDetail from '@/views/app/Wishlists/pages/WishlistDetailPage.vue'
+import WishlistDetailPage from '@/views/app/Wishlists/pages/WishlistDetailPage.vue'
 import EventsPage from '@/views/app/Events/pages/EventsPage.vue'
-import EventDetail from '@/views/app/Events/pages/EventDetail.vue'
+import EventDetailPage from '@/views/app/Events/pages/EventDetailPage.vue'
+
 import PublicWishlistPage from '@/views/public/wishlist/PublicWishlistPage.vue'
+
+import NotFound from '@/views/errors/NotFound.vue'
+import Forbidden from '@/views/errors/Forbidden.vue'
+import ServerError from '@/views/errors/ServerError.vue'
 
 const routes = [
 
@@ -47,12 +52,12 @@ const routes = [
     children: [
       {path: '', redirect: '/app/dashboard'},
       {path: 'dashboard', component: Dashboard},
-      {path: 'profile', component: Profile},
+      {path: 'profile', component: ProfilePage},
       {path: 'wishlists', component: WishlistsPage},
-      {path: 'wishlists/:id', component: WishlistDetail},
+      {path: 'wishlists/:id', component: WishlistDetailPage},
       {path: 'events', component: EventsPage},
-      {path: 'events/:id', component: EventDetail},
-      {path: 'people', component: Profile},
+      {path: 'events/:id', component: EventDetailPage},
+      {path: 'people', component: ProfilePage},
     ]
   },
 
@@ -63,9 +68,20 @@ const routes = [
     meta: { public: true },
     children: [
       {path: 'w/:id', component: PublicWishlistPage},
-      {path: 'e/:id', component: EventDetail}
+      {path: 'e/:id', component: PublicWishlistPage}
     ]
-  }
+  },
+
+  {
+    path: '/error',
+    children: [
+      { path: '403', component: Forbidden },
+      { path: '404', component: NotFound },
+      { path: '500', component: ServerError },
+    ]
+  },
+
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
 const router = createRouter({
@@ -74,9 +90,6 @@ const router = createRouter({
 })
 
 router.beforeEach(async(to) => {
-  console.log('path:', to.path)
-  console.log('matched:', to.matched.map(r => ({ path: r.path, meta: r.meta })))
-  console.log('isPublic:', to.matched.some(r => r.meta.public))
   const auth = useAuthStore()
   const loading = useLoadingStore()
 

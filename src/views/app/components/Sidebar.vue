@@ -1,9 +1,10 @@
 <!-- AppSidebar.vue -->
 <script setup>
-    import { RouterLink, useRoute } from 'vue-router'
+    import { RouterLink, useRoute, useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/auth'
 
     const route = useRoute()
+    const router = useRouter()
     const auth = useAuthStore()
 
     const links = [
@@ -14,6 +15,11 @@
     ]
 
     const isActive = (item) => route.path.startsWith(item.to)
+
+    const logout = async() => {
+        await auth.logout()
+        router.push('/')
+    }
 </script>
 
 <template>
@@ -41,7 +47,7 @@
         Profilo
       </RouterLink>
 
-      <button class="sidebar__logout" @click="auth.logout">
+      <button class="sidebar__logout" @click="logout">
         Esci
       </button>
     </div>

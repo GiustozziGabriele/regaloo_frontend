@@ -2,7 +2,8 @@
     import { useRoute } from 'vue-router'
     import { watch, computed, ref, onMounted } from 'vue';
     import { usePublicWishlistStore } from './publicWishlistStore';
-    import ItemCardPublic from '@/components/UI components/ItemCardPublic.vue';
+    import ItemPublicCard from '@/components/UI components/ItemPublicCard.vue';
+
 
     const route = useRoute()
     const publicWishlistStore = usePublicWishlistStore()
@@ -19,17 +20,17 @@
     })
 
     const filteredItems = computed(() =>
-        publicWishlistStore.wishilistItems.filter(item =>
+        publicWishlistStore.getItems(id.value).filter(item =>
             item.item_id?.title?.toLowerCase().includes(search.value.toLowerCase())
         )
     )
 </script>
 
 <template>
-    <div v-if="publicWishlistStore.wishilistItems">
+    <div v-if="publicWishlistStore.wishilistItems[id]">
         <!-- header -->
         <div class="d-flex align-items-center justify-content-between mb-3">
-            <h4 style="font-size: 16px; font-weight: 500; margin: 0;">{{ publicWishlistStore.wishilistItems[0]?.wishlist_id.title }}</h4>
+            <h4 style="font-size: 16px; font-weight: 500; margin: 0;">{{ publicWishlistStore.wishilistItems[id][0]?.wishlist_id.title }}</h4>
         </div>
 
         <!-- toolbar -->
@@ -44,11 +45,11 @@
 
         <!-- griglia -->
         <div v-if="filteredItems.length" class="app-grid">
-            <ItemCardPublic 
+            <ItemPublicCard 
                 v-for="item in filteredItems"
                 :key="item.id"
                 :item="item"
-                :is-owner="publicWishlistStore.isOwner"
+                :show-details="publicWishlistStore.showDetails"
             />
         </div>
 

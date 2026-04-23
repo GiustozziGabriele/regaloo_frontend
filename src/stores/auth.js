@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useWishlistsStore } from '@/views/app/Wishlists/stores/wishlistsStore'
 import { useWishlistItemsStore } from '@/views/app/Wishlists/stores/wishlistItemsStore'
 import { supabase } from '@/lib/supabase'
+import { useEventsStore } from '@/views/app/Events/stores/eventsStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -19,100 +20,103 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     // 🚀 inizializza sessione (OBBLIGATORIO all'avvio app)
     async init() {
-      if (this.initialized) return
-      this.loading = true
+        if (this.initialized) return
+        this.loading = true
 
-      const { data } = await supabase.auth.getSession()
+        const { data } = await supabase.auth.getSession()
 
-      this.session = data.session
-      this.user = data.session?.user ?? null
+        this.session = data.session
+        this.user = data.session?.user ?? null
 
-      this.initialized = true
-      this.loading = false
+        this.initialized = true
+        this.loading = false
     },
 
     // 🔑 LOGIN
     async login(email, password) {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        })
 
-      if (error) throw error
+        if (error) throw error
 
-      this.session = data.session
-      this.user = data.user
+        this.session = data.session
+        this.user = data.user
 
-      return data
+        return data
     },
 
     // 🆕 REGISTER
     async register(email, password, name, surname) {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback`
-        }
-      })
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback`,
+                data: {
+                    name,
+                    surname
+                }
+            }
+        })
 
-      if (error) throw error
+        if (signUpError) throw signUpError
 
-      //Creare quindi nuovo utente con l'id che ricevo da data
-
-      return data
+      return signUpData
     },
 
      async resendEmail(email) {
-      const { data, error } = await supabase.auth.resend({
-        type: 'signup',
-        email: email,
-        options: {
-          emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback`
-        }
-      })
+        const { data, error } = await supabase.auth.resend({
+            type: 'signup',
+            email: email,
+            options: {
+            emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback`
+            }
+        })
 
-      if (error) throw error
+        if (error) throw error
 
-      return data
+        return data
     },
 
     // 🚪 LOGOUT
     async logout() {
-      const { error } = await supabase.auth.signOut()
+        const { error } = await supabase.auth.signOut()
 
-      if (error) throw error
+        if (error) throw error
 
-      useWishlistsStore().$reset()
-      useWishlistItemsStore().$reset()
-      this.$reset()
+        useWishlistsStore().$reset()
+        useWishlistItemsStore().$reset()
+        useEventsStore().$reset()
+        this.$reset()
     },
 
     // 🔁 RESET PASSWORD (email link)
     async resetPassword(email) {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${import.meta.env.VITE_APP_URL}/reset-password`
-      })
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${import.meta.env.VITE_APP_URL}/reset-password`
+        })
 
-      if (error) throw error
+        if (error) throw error
 
-      return data
+        return data
     },
 
     // 🔐 UPDATE PASSWORD (dopo link email)
     async updatePassword(newPassword) {
-      const { data, error } = await supabase.auth.updateUser({
-        password: newPassword
-      })
+        const { data, error } = await supabase.auth.updateUser({
+            password: newPassword
+        })
 
-      if (error) throw error
+        if (error) throw error
 
-      return data
+        return data
     },
 
     setSession(session) {
-      this.session = session
-      this.user = session?.user ?? null
+        this.session = session
+        this.user = session?.user ?? null
     }
   },
 
