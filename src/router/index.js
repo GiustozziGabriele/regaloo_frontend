@@ -19,6 +19,7 @@ import WishlistsPage from '@/views/app/Wishlists/pages/WishlistsPage.vue'
 import WishlistDetail from '@/views/app/Wishlists/pages/WishlistDetailPage.vue'
 import EventsPage from '@/views/app/Events/pages/EventsPage.vue'
 import EventDetail from '@/views/app/Events/pages/EventDetail.vue'
+import PublicWishlistPage from '@/views/public/wishlist/PublicWishlistPage.vue'
 
 const routes = [
 
@@ -61,7 +62,7 @@ const routes = [
     component: PublicLayout,
     meta: { public: true },
     children: [
-      {path: 'w/:id', component: WishlistDetail},
+      {path: 'w/:id', component: PublicWishlistPage},
       {path: 'e/:id', component: EventDetail}
     ]
   }
@@ -73,28 +74,34 @@ const router = createRouter({
 })
 
 router.beforeEach(async(to) => {
+  console.log('path:', to.path)
+  console.log('matched:', to.matched.map(r => ({ path: r.path, meta: r.meta })))
+  console.log('isPublic:', to.matched.some(r => r.meta.public))
   const auth = useAuthStore()
   const loading = useLoadingStore()
 
   loading.start(to.name)
 
-  // aspetta init se necessario
   if (auth.loading) {
     await auth.init()
   }
 
-  // se route protetta e non loggato
-  if (to.meta.requiresAuth && !auth.user) {
+  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
+  const isPublic = to.matched.some(r => r.meta.public)
+
+  // 🔐 PROTETTA
+  if (requiresAuth && !auth.user) {
     loading.stop()
     return '/login'
   }
 
-  if (to.meta.public && auth.isAuthenticated) {
+  // 🔓 PUBBLICA
+  if (isPublic) {
     loading.stop()
-    return '/app'
+    return true
   }
 
-  // se loggato e va su login
+  // già loggato → evita login/register
   if ((to.path === '/login' || to.path === '/register') && auth.user) {
     loading.stop()
     return '/app/dashboard'

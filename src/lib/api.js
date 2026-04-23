@@ -9,7 +9,6 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const auth = useAuthStore()
-
   const token = auth.session?.access_token
 
   if (token) {

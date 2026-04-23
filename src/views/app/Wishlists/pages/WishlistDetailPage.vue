@@ -4,10 +4,13 @@
     import { useWishlistsStore } from '../stores/wishlistsStore';
     import { useWishlistItemsStore } from '../stores/wishlistItemsStore';
     import { useModalStore } from '@/stores/modalStore';
-    import WishlistItemCard from '../componentes/WishlistItemCard.vue';
+    import { shareWishlist } from '@/lib/utils';
+    import ItemCardPrivate from '@/components/UI components/ItemCardPrivate.vue';
     import AddItemModal from '../componentes/AddItemModal.vue';
     import EditItemModal from '../componentes/EditItemModal.vue';
     import Dropdown from '@/components/UI components/Dropdown.vue';
+
+
 
     const route = useRoute()
     const router = useRouter()
@@ -31,30 +34,18 @@
         )
     )
 
-    const addItem = async(value) => {
-        await items.addItem(value, id.value)
-    }
-    
-    const addItems = async(value) => {
-        await items.addAvailableItems(value, id.value)
-    }
+    const addItem = async(value) => await items.addItem(value, id.value)
+    const updateItem = async(value) => await items.updateItem(value.data, value.id, id.value)
+    const deleteItem = async(value) => await items.removeItem(value?.item_id.id, id.value)
 
-    const updateItem = async(value) => {
-        await items.updateItem(value.data, value.id, id.value)
-    }
-
-    const deleteItem = async(value) => {
-        await items.removeItem(value?.item_id.id, id.value)
-    }
-
-    const availableItems = async() => {
-        await items.fetchAvailableItems(id.value)
-    }
+    const addItems = async(value) => await items.addAvailableItems(value, id.value)
 
     const deleteWIshlist = async() => {
         const res = await wishlists.deleteWishlist(id.value)
         if(res) router.push('/app/wishlists')
     }
+
+    const share = async() => await shareWishlist(id.value, wishlist.value.title)
 </script>
 
 <template>
@@ -64,7 +55,7 @@
             <h4 style="font-size: 16px; font-weight: 500; margin: 0;">{{ wishlist.title }}</h4>
 
             <div class="d-flex gap-2">
-                <button class="icon-btn" title="Condividi">
+                <button class="icon-btn" title="Condividi" @click="share">
                     <i class="fi fi-br-share-square"></i>
                 </button>
 
@@ -102,7 +93,7 @@
 
         <!-- griglia -->
         <div v-if="filteredItems.length" class="app-grid">
-            <WishlistItemCard
+            <ItemCardPrivate 
                 v-for="item in filteredItems"
                 :key="item.id"
                 :item="item"
